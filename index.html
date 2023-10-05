@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/5.1.1/css/bootstrap.min.css">
+    <!-- 在<body>标签结尾前引入Bootstrap 5 JavaScript -->
+        <script src="https://cdn.staticfile.org/bootstrap/5.3.0/js/bootstrap.bundle.js"></script>
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+    <title>Title</title>
+</head>
+
+<style>
+  .chart-container {
+    display: inline-block;
+    width: 45%;
+    margin: 2%;
+    text-align: center;
+  }
+  .chart-container2 {
+    display: inline-block;
+    width: 90%;
+    margin: 2%;
+    text-align: center;
+  }
+
+  .chart-container p {
+    margin-top: 10px;
+  }
+</style>
+
+<body> 
+  <nav class="navbar navbar-expand-lg navbar-dark"  style="background-color: #c23939">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+          <img src="https://static.thenounproject.com/png/164722-200.png" width="40" height="40" style="border-radius: 50%;">
+        </a>
+      </div>
+  </nav>
+  <div class="container py-5">
+    <h2 class="mb-4 text-center">Data Visualization</h2>
+
+    <div style="text-align: center;">
+      <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/15/33/f5/de/london.jpg?w=700&h=500&s=1" style="width: 80%; margin-bottom: 20px;">
+    </div>
+    
+    <div class="chart-container2" >
+     
+      <div id="piechart"></div>
+      <p> <strong>Description</strong> for chart 1</p>
+    </div>
+    <div class="chart-container2">
+      <div id="scatterplot"></div>
+      <p>Description for chart 1</p>
+    </div>
+    <div class="chart-container2">
+      <div id="vis1"></div>
+      <p>Description for chart 1</p>
+    </div>
+    <div class="chart-container2">
+      <div id="vis2"></div>
+      <p>Description for chart 1</p>
+    </div>
+  </div>
+  <script>
+      var pie_data = {
+        "values": [
+          {"Type": "ask agent", "Proportion": 0.045070},
+          {"Type": "freehold", "Proportion": 0.436620},
+          {"Type": "leasehold", "Proportion": 0.450704},
+          {"Type": "share of freehold", "Proportion": 0.067606}
+        ]
+      };
+
+      var pie_spec = {
+        "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
+        "description": "A pie chart",
+        "data": pie_data,
+        "layer": [
+          {
+            "mark": {
+              "type": "arc",
+              "innerRadius": 60,
+              "outerRadius": 120
+            },
+            "encoding": {
+              "tooltip": [
+                {"field": "Type", "type": "nominal"},
+                {"field": "Proportion", "type": "quantitative"}
+              ],
+              "theta": {"field": "Proportion", "type": "quantitative"},
+              "color": {"field": "Type", "type": "nominal"}
+            }
+          },
+          {
+            "mark": {
+              "type": "text",
+              "radius": 115
+            },
+          }
+        ],
+        "view": {"stroke": null}
+      };
+
+      vegaEmbed('#piechart', pie_spec);
+  
+      vegaEmbed('#scatterplot', {
+        "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+        "data": {
+          "url": "https://raw.githubusercontent.com/Daniel9870/FIT3179-Assignment-2/main/london_house_prices.csv",
+          "format": {
+            "type": "csv"
+          }
+        },
+        "width": 400,
+        "height": 300,
+        "padding": {"left": 40, "right": 40, "top": 40, "bottom": 40},
+        "autosize": {"type": "pad", "resize": true},
+        "mark": {"type": "circle", "filled": true, "size": 60},
+        "encoding": {
+          "x": {"field": "bedrooms", "type": "quantitative", "axis": {"title": "Bedrooms"}},
+          "y": {"field": "price_pounds", "type": "quantitative", "axis": {"title": "Price (Pounds)"}},
+          "color": {"value": "steelblue"},
+          "tooltip": [
+            {"field": "bedrooms", "type": "quantitative"},
+            {"field": "price_pounds", "type": "quantitative", "format": ".2f"}
+          ]
+        },
+        "config": {
+          "axis": {
+            "labelFontSize": 14,
+            "titleFontSize": 16
+          }
+        }
+      }, {renderer: 'svg'});
+  
+      
+
+    const data = [
+      {"area_name": "Camden", "average_price": 750000, "center_latitude": 51.5416, "center_longitude": -0.1404},
+      {"area_name": "Kensington and Chelsea", "average_price": 1200000, "center_latitude": 51.5014, "center_longitude": -0.1919},
+      {"area_name": "Tower Hamlets", "average_price": 600000, "center_latitude": 51.5203, "center_longitude": -0.0293},
+      {"area_name": "Islington", "average_price": 850000, "center_latitude": 51.5465, "center_longitude": -0.1058},
+      {"area_name": "Westminster", "average_price": 950000, "center_latitude": 51.5010, "center_longitude": -0.1246}
+    ];
+    
+    vegaEmbed('#vis1', {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "width": 500,
+      "height": 300,
+      "view": {
+        "stroke": "transparent"
+      },
+      "layer": [
+        {
+          "data": {
+            "url": "https://raw.githubusercontent.com/Daniel9870/FIT3179-Assignment-2/main/londonBoroughs.json",
+            
+            "format": {
+              "type": "topojson",
+              "feature": "boroughs"
+            }
+          },
+          "mark": {
+            "type": "geoshape",
+            // "stroke": "white",
+            "fill": "lightgray",
+            "stroke": "black",
+            "strokeWidth": 2
+          },
+          "encoding": {
+            "tooltip": [
+              {"field": "area_name", "type": "nominal", "title": "Borough"},
+              {"field": "average_price", "type": "quantitative", "title": "Average Price"}
+            ],
+            // "color": {
+            //   "field": "area_color",
+            //   "type": "nominal",
+            //   "scale": {"scheme": "category10"} // 使用"category10"调色板
+            // }
+          }
+        },
+
+        {
+          "data": {
+            "url": "https://raw.githubusercontent.com/Daniel9870/FIT3179-Assignment-2/main/londonCentroids.json",
+            "format": {
+              "type": "json"
+            }
+          },
+          "transform": [
+            {
+              "calculate": "indexof (datum.name,' ') > 0  ? substring(datum.name,0,indexof(datum.name, ' ')) : datum.name",
+              "as": "bLabel"
+            }
+          ],
+          "mark": "text",
+          "encoding": {
+            "longitude": {
+              "field": "cx",
+              "type": "quantitative"
+            },
+            "latitude": {
+              "field": "cy",
+              "type": "quantitative"
+            },
+            "text": {
+              "field": "bLabel",
+              "type": "nominal"
+            },
+            "size": {
+              "value": 8
+            },
+            "opacity": {
+              "value": 0.6
+            }
+          }
+        },
+        {
+          "data": {"values": data},
+          "mark": {"type": "circle", "filled": true},
+          "encoding": {
+            "longitude": {"field": "center_longitude", "type": "quantitative"},
+            "latitude": {"field": "center_latitude", "type": "quantitative"},
+            "size": {"value": 100}, // 设置一个固定的圆的大小
+            "color": {"field": "average_price", "type": "quantitative", "scale": {"scheme": "viridis"}, "title": "Average Price"}, // 使用"viridis"调色板
+            "tooltip": [
+              {"field": "area_name", "type": "nominal", "title": "Borough"},
+              {"field": "average_price", "type": "quantitative", "title": "Average Price"}
+            ]
+          }
+        }
+      
+      ]
+
+    });
+    
+
+    
+
+
+    const data_ = [
+      {"area_name": "Camden", "average_price": 750000, "center_latitude": 51.5416, "center_longitude": -0.1404},
+      {"area_name": "Kensington and Chelsea", "average_price": 1200000, "center_latitude": 51.5014, "center_longitude": -0.1919},
+      {"area_name": "Tower Hamlets", "average_price": 600000, "center_latitude": 51.5203, "center_longitude": -0.0293},
+      {"area_name": "Islington", "average_price": 850000, "center_latitude": 51.5465, "center_longitude": -0.1058},
+      {"area_name": "Westminster", "average_price": 950000, "center_latitude": 51.5010, "center_longitude": -0.1246}
+    ];
+
+    const spec2 = {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "width": 500,
+      "height": 300,
+      "view": {
+        "stroke": "transparent"
+      },
+      "layer": [
+        {
+          "data": {
+            "url": "https://raw.githubusercontent.com/Daniel9870/FIT3179-Assignment-2/main/londonBoroughs.json",
+            
+            "format": {
+              "type": "topojson",
+              "feature": "boroughs"
+            }
+          },
+          "mark": {
+            "type": "geoshape",
+            // "stroke": "white",
+            "fill": "lightgray",
+            "stroke": "black",
+            "strokeWidth": 2
+          },
+          "encoding": {
+            "tooltip": [
+              {"field": "area_name", "type": "nominal", "title": "Borough"},
+              {"field": "average_price", "type": "quantitative", "title": "Average Price"}
+            ],
+          }
+        },
+
+        {
+          "data": {
+            "url": "https://raw.githubusercontent.com/Daniel9870/FIT3179-Assignment-2/main/londonCentroids.json",
+            "format": {
+              "type": "json"
+            }
+          },
+          "transform": [
+            {
+              "calculate": "indexof (datum.name,' ') > 0  ? substring(datum.name,0,indexof(datum.name, ' ')) : datum.name",
+              "as": "bLabel"
+            }
+          ],
+          "mark": "text",
+          "encoding": {
+            "longitude": {
+              "field": "cx",
+              "type": "quantitative"
+            },
+            "latitude": {
+              "field": "cy",
+              "type": "quantitative"
+            },
+            "text": {
+              "field": "bLabel",
+              "type": "nominal"
+            },
+            "size": {
+              "value": 8
+            },
+            "opacity": {
+              "value": 0.6
+            }
+          }
+        },
+        {
+          "data": {"values": data_},
+          "mark": {"type": "circle", "filled": true},
+          "encoding": {
+            "longitude": {"field": "center_longitude", "type": "quantitative"},
+            "latitude": {"field": "center_latitude", "type": "quantitative"},
+            "size":{"field": "average_price", "type": "quantitative", "scale": {"type": "linear", "zero": false}},
+            "color": {"value": "steelblue"},
+            "tooltip": [
+              {"field": "area_name", "type": "nominal", "title": "Borough"},
+              {"field": "average_price", "type": "quantitative", "title": "Average Price"}
+            ]
+          }
+        }
+      
+      ]
+
+    };
+    vegaEmbed('#vis2', spec2);
+  </script>
+  <footer class="container-fluid fixed-bottom text-center p-2 mt-5 text-white"  style="background-color: #c23939">
+        AUthor
+  </footer>
+</body>
+</html>
